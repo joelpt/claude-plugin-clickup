@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "clickup": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/joelpt/clickup-mcp@e7aee6f912b377c49629acdddef41833c6fd1643",
+        "clickup-mcp"
+      ],
+      "env": {
+        "CLICKUP_API_KEY": "${CLICKUP_API_KEY}",
+        "CLICKUP_TEAM_ID": "${CLICKUP_TEAM_ID}"
+      }
+    }
+  }
+}

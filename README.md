@@ -1,7 +1,9 @@
 # ClickUp Plugin for Claude Code
 
 A Claude Code plugin that integrates with ClickUp for project management.
-Calls the [ClickUp REST API v2](https://clickup.com/api/) directly — no third-party MCP server required.
+It registers the [`clickup-mcp`](https://github.com/joelpt/clickup-mcp) MCP server (a direct
+[ClickUp REST API v2](https://clickup.com/api/) wrapper — no third-party service, no license key)
+and ships a skill that drives its `mcp__clickup__*` tools.
 
 ## Features
 
@@ -17,7 +19,7 @@ Calls the [ClickUp REST API v2](https://clickup.com/api/) directly — no third-
 2. **ClickUp Team ID** — Open ClickUp in your browser.
 The URL looks like `https://app.clickup.com/1234567/...` — the first number (`1234567`) is your Team ID.
 
-3. **`uv`** — The script uses [uv](https://docs.astral.sh/uv/) for zero-install dependency management.
+3. **`uv`** — The MCP server runs via [uv](https://docs.astral.sh/uv/)/`uvx` straight from GitHub (zero install).
 Install with `brew install uv` or `curl -LsSf https://astral.sh/uv/install.sh | sh`.
 
 ## Setup
@@ -47,9 +49,10 @@ Once installed, describe your ClickUp task naturally:
 
 ## How it works
 
-The plugin adds a `clickup` CLI to your session PATH.
-Claude calls it with the Bash tool — no MCP server subprocess, no npm, no license key.
-The script auto-installs its Python dependencies (`httpx`, `typer`) via `uv` on first run and caches them.
+The plugin's `.mcp.json` registers the `clickup` MCP server, launched on demand via
+`uvx --from git+https://github.com/joelpt/clickup-mcp@<pinned-sha> clickup-mcp`. Each ClickUp
+operation is its own `mcp__clickup__*` tool, so an MCP host can permit or gate them individually
+(e.g. allow reads, gate writes). `uvx` fetches and caches the server (and its deps) on first run.
 
 ## License
 

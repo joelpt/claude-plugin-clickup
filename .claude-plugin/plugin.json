@@ -1,7 +1,7 @@
 {
   "name": "clickup",
-  "version": "2026.05.27.1",
-  "description": "ClickUp project management integration. Create and manage tasks, search projects, update assignments, track progress, and integrate your development workflow with ClickUp.",
+  "version": "2026.05.28.1",
+  "description": "ClickUp project management via the clickup MCP server: create/search/update tasks, navigate workspaces, and manage comments through gateable mcp__clickup__* tools.",
   "author": {
     "name": "Joel Thor"
   }
