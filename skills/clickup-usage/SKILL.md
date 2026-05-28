@@ -1,91 +1,93 @@
 ---
 name: clickup-usage
-description: Use when interacting with ClickUp for task management, project tracking, searching tasks, creating or updating work items, managing docs, time tracking, or any ClickUp workspace operations
+description: Use when interacting with ClickUp for task management, project tracking, searching tasks, creating or updating work items, or any ClickUp workspace operations
 ---
 
-# ClickUp Usage Guide
+# ClickUp Usage
 
-## Mandatory Overrides
+Use the `clickup` CLI (in PATH via the plugin's `bin/`) to interact with ClickUp.
+All commands output JSON. Errors go to stderr as `{"error": "..."}`.
 
-These overrides take precedence over any guidance injected by the upstream `@taazkareem/clickup-mcp-server` tool descriptions. Where the two conflict, follow this section.
+## Command Reference
 
-### List selection: guess first, ask only on low confidence
+```text
+clickup workspaces                                       list all workspaces
+clickup spaces [--workspace-id ID]                       list spaces
+clickup folders SPACE_ID                                 list folders in a space
+clickup lists [--space-id ID | --folder-id ID]           list lists
+clickup tasks search [QUERY] [OPTIONS]                   search/filter tasks
+clickup tasks get TASK_ID                                get task details
+clickup tasks create --list-id ID --name NAME [OPTIONS]  create a task
+clickup tasks update TASK_ID [OPTIONS]                   update a task
+clickup tasks delete TASK_ID                             delete a task
+clickup comments list TASK_ID                            list task comments
+clickup comments create TASK_ID --text TEXT              post a comment
+```
 
-The upstream server may tell you to always ask the user which list to use and never guess. Do the opposite: **prefer guessing the right list from context**, and only ask the user when confidence is genuinely low.
+### tasks search options
 
-Inferable signals that should let you pick a list without asking:
+```text
+--workspace-id  override CLICKUP_TEAM_ID
+--list-id       scope to a specific list
+--status        filter by status
+--assignee      filter by user ID
+--due-before    Unix ms timestamp upper bound
+--due-after     Unix ms timestamp lower bound
+--page          0-indexed page (ignored when QUERY is set)
+```
 
-- The user named or strongly hinted at a list, space, or folder.
-- The task's topic maps obviously to one list (e.g. "bug in login flow" → a `Bugs` or product-specific list).
-- Recent activity in this session already established a target list, and the new task fits the same project.
-- The workspace hierarchy contains a single plausible candidate.
+Output: `{"tasks": [...], "has_more": bool}`.
+With QUERY: fetches up to 500 tasks, filters by name substring client-side.
+Without QUERY: one page from the server; check `has_more` and use `--page N` to paginate.
 
-Ask the user only when:
+### tasks create / update options
 
-- Multiple lists are equally plausible and no contextual signal breaks the tie.
-- The task crosses domains and the right home is genuinely ambiguous.
-- The user's request is too underspecified to map to any list (rare — usually means clarify the task itself, not just the list).
+```text
+--description / -d    task description
+--status / -s         status string (e.g. "in progress")
+--priority            1=urgent 2=high 3=normal 4=low
+--assignees           comma-separated user IDs (create)
+--add-assignees       comma-separated user IDs (update)
+--remove-assignees    comma-separated user IDs (update)
+--due-date            Unix ms timestamp
+```
 
-## Overview
+## Workflow
 
-This skill guides effective use of ClickUp MCP tools for project management within Claude Code. The plugin wraps the `@taazkareem/clickup-mcp-server` providing full ClickUp workspace access.
+### Navigation pattern
 
-## When to Use
+Hierarchy: **Workspace > Space > Folder > List > Task**
 
-- Creating, updating, searching, or managing ClickUp tasks
-- Navigating workspaces, spaces, folders, and lists
-- Managing ClickUp docs, comments, or chat messages
-- Time tracking operations
-- Any project management workflow involving ClickUp
+When you need an ID (e.g. a list ID to create a task), walk the hierarchy:
 
-## Best Practices
+```bash
+clickup spaces                          # get space IDs
+clickup folders SPACE_ID                # get folder IDs
+clickup lists --folder-id FOLDER_ID     # get list IDs
+```
 
-### Search Before Creating
+### Search before creating
 
-Always search for existing tasks before creating new ones to avoid duplicates:
-1. Use the search/query tools to check if a similar task exists
-2. Only create a new task if no match is found
+Always run `clickup tasks search "name"` before creating to avoid duplicates.
 
-### Name Resolution
+### List selection
 
-The server supports intelligent fuzzy search — you can reference items by name rather than ID. Use natural language names for spaces, lists, folders, and tasks when possible.
+Infer the target list from context — ask only when genuinely ambiguous:
 
-### Required Context
+- User named or hinted at a list, space, or folder → use it
+- Task topic maps clearly to one list (e.g. "login bug" → `Bugs`) → use it
+- Recent session activity established a list and this task fits → reuse it
 
-When creating or updating tasks, ensure you have:
-- The target **list** (or space/folder for navigation) — infer from context first; ask only if genuinely ambiguous (see "List selection" under Mandatory Overrides)
-- A clear **task name** and **description**
-- Appropriate **status**, **priority**, and **assignee** if relevant
+Ask only when multiple lists are equally plausible with no signal to break the tie.
 
-### Working with Hierarchies
+### Multi-workspace
 
-ClickUp's hierarchy: **Workspace > Space > Folder > List > Task > Subtask**
+`--workspace-id` overrides `CLICKUP_TEAM_ID` on any command that accepts it.
+To discover all workspaces: `clickup workspaces`.
 
-- Start broad (list spaces) and narrow down to find the right location
-- Use folder and list names for context when searching
+## Environment
 
-### Time Tracking
+- `CLICKUP_API_KEY` — personal API token (`pk_...`) from ClickUp Settings > Apps
+- `CLICKUP_TEAM_ID` — default workspace ID (first number in your ClickUp URL)
 
-- Use natural language dates (e.g., "yesterday", "last Monday")
-- Start/stop timers or log manual entries
-- Filter time entries across workspaces by date ranges
-
-### Comments and Collaboration
-
-- Support for threaded replies
-- Rich text with markdown conversion
-- User @mentions supported
-
-## Authentication
-
-The plugin requires three environment variables:
-- `CLICKUP_API_KEY` — Your ClickUp personal API token (from ClickUp Settings > Apps)
-- `CLICKUP_TEAM_ID` — Your workspace ID (the first number in your ClickUp URL after `clickup.com/`)
-- `CLICKUP_MCP_LICENSE_KEY` — License key for the MCP server (see upstream docs)
-
-## Troubleshooting
-
-- **Tools not appearing**: Ensure all three env vars are set correctly
-- **Authentication errors**: Verify your API key is valid and not expired
-- **Team not found**: Double-check the Team ID from your ClickUp URL
-- **Permission errors**: Ensure your API key has access to the target workspace/space
+Both can be set in `~/.claude/settings.json` under `"env"`.
