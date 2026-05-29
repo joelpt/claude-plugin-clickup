@@ -34,6 +34,22 @@ All tools return JSON text. Errors surface as MCP tool errors with a message.
 `due_before`, `due_after`, `list_id`, `page`; with `query` it filters task names
 client-side over up to 500 tasks and returns `{"tasks": [...], "has_more": bool}`.
 
+## Presenting results
+
+Default to a **Markdown table** when returning more than one item — tasks, spaces, lists,
+folders, comments. One row per item; pick columns that match the request (commonly name,
+status, priority, assignee, due date, id). A table makes the cross-item comparison the user
+usually wants scannable at a glance.
+
+Deviate when another shape is the better fit:
+
+- The user asked for or implied a different format (prose summary, just the ids, a checklist) → honor it.
+- A single item, or a genuinely narrative answer → prose, not a one-row table.
+- Items the user will act on in order (steps, a backlog to work top-down) → a numbered list;
+  a handful of loosely-related one-liners → a bulleted list.
+
+Never dump raw tool JSON at the user — it's the wire format, not a presentation.
+
 ## Workflow
 
 ### Navigation
