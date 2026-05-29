@@ -50,7 +50,10 @@ Once installed, describe your ClickUp task naturally:
 ## How it works
 
 The plugin's `.mcp.json` registers the `clickup` MCP server, launched on demand via
-`uvx --from git+https://github.com/joelpt/clickup-mcp@<pinned-sha> clickup-mcp`. Each ClickUp
+`uvx --from git+https://github.com/joelpt/clickup-mcp@<commit-sha> clickup-mcp`. The pin is an
+immutable full commit SHA — the commit a CalVer release tag (e.g. `v2026.05.29.1`) points to, which
+matches this plugin's own version, so the two line up to signal a compatible pair while the SHA keeps
+the reference tamper-proof (a tag could be force-moved). Each ClickUp
 operation is its own `mcp__clickup__*` tool, so an MCP host can permit or gate them individually
 (e.g. allow reads, gate writes). `uvx` fetches and caches the server (and its deps) on first run.
 
