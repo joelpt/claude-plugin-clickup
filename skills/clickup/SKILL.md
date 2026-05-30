@@ -1,6 +1,6 @@
 ---
 name: clickup
-description: Use when interacting with ClickUp for task management, project tracking, searching tasks, creating or updating work items, or any ClickUp workspace operations
+description: ClickUp task management & workspace
 ---
 
 # ClickUp
