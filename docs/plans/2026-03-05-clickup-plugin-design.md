@@ -36,7 +36,7 @@ clickup-plugin/
 {
   "name": "clickup",
   "description": "ClickUp project management integration. Create and manage tasks, search projects, update assignments, track progress, and integrate your development workflow with ClickUp.",
-  "author": {"name": "Joel Thor"},
+  "author": {"name": "Joel Thornton"},
   "mcpServers": {
     "clickup": {
       "command": "npx",

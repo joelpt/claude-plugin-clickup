@@ -1,8 +1,8 @@
 {
   "name": "clickup",
-  "version": "2026.05.29.3",
+  "version": "2026.05.30.1",
   "description": "ClickUp project management via the clickup MCP server: create/search/update tasks, navigate workspaces, and manage comments through gateable mcp__clickup__* tools.",
   "author": {
-    "name": "Joel Thor"
+    "name": "Joel Thornton"
   }
 }
