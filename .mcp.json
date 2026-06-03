@@ -5,7 +5,7 @@
       "command": "uvx",
       "args": [
         "--from",
-        "git+https://github.com/joelpt/clickup-mcp@c59e412728d061ea249685f27b9773a49fabb9aa",
+        "git+https://github.com/joelpt/clickup-mcp@e806eb8e0c968f7baa75192efbef9372d3cef73b",
         "clickup-mcp"
       ]
     }
