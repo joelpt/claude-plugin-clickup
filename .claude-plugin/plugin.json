@@ -1,7 +1,7 @@
 {
   "name": "clickup",
-  "version": "2026.06.04.4",
-  "description": "ClickUp project management via the clickup MCP server: create, search, and update tasks, subtasks, lists, folders, and spaces, plus time tracking, goals, checklists, dependencies, tags, comments, custom fields, views, and webhooks — through individually gateable mcp__clickup__* tools. Direct ClickUp REST API v2 — no license key.",
+  "version": "2026.06.23.1",
+  "description": "ClickUp project management via the clickup MCP server: create, search, and update tasks, subtasks, lists, folders, and spaces, plus time tracking, goals, checklists, dependencies, tags, comments, custom fields, views, and webhooks \u2014 through individually gateable mcp__clickup__* tools. Direct ClickUp REST API v2 \u2014 no license key.",
   "author": {
     "name": "Joel Thornton"
   }
