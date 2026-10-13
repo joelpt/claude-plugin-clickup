@@ -10,7 +10,7 @@ through its `mcp__clickup__*` tools — never shell out to the REST API directly
 
 ## Tools
 
-The server exposes 81 tools, each named `mcp__clickup__<tool>`.
+The server exposes 90 tools, each named `mcp__clickup__<tool>`.
 Core ones, with their main arguments:
 
 ```text
@@ -31,15 +31,15 @@ mcp__clickup__add_comment      task_id text [notify_all]
 The rest, by domain (use the tool name as listed, with the `mcp__clickup__` prefix):
 
 - **Spaces, folders, lists** — `get_/create_/update_/delete_` for each, plus `create_folderless_list`, `get_list_members`
-- **Tasks** — `get_task_members`, `get_task_time_in_status`, `add_dependency`, `remove_dependency`, `add_task_link`, `remove_task_link`
+- **Tasks** — `merge_tasks` (consumes the source tasks), `add_task_to_list`, `remove_task_from_list`, `get_task_members`, `get_task_time_in_status`, `add_dependency`, `remove_dependency`, `add_task_link`, `remove_task_link`
 - **Checklists** — `create_/update_/delete_checklist` and `create_/update_/delete_checklist_item`
-- **Comments** — `list_list_comments`, `create_list_comment`, `update_comment`, `delete_comment`
+- **Comments** — `list_list_comments`, `create_list_comment`, `list_comment_replies`, `create_comment_reply`, `update_comment`, `delete_comment`
 - **Custom fields** — `list_custom_fields`, `set_custom_field_value`, `remove_custom_field_value`
 - **Tags** — `get_space_tags`, `create_/update_/delete_space_tag`, `add_task_tag`, `remove_task_tag`
 - **Goals** — `list_goals`, `get_/create_/update_/delete_goal`, `create_/update_/delete_key_result`
 - **Views** — `list_workspace_views`, `list_space_views`, `list_folder_views`, `list_list_views`, `get_view`, `get_view_tasks`, `create_/update_/delete_view`
 - **Webhooks** — `list_webhooks`, `create_/update_/delete_webhook`
-- **Time tracking** — `get_time_entries`, `get_running_time_entry`, `create_/update_/delete_time_entry`, `start_timer`, `stop_timer`
+- **Time tracking** — `get_time_entries`, `get_running_time_entry`, `create_/update_/delete_time_entry`, `start_timer`, `stop_timer`, `list_time_entry_tags`, `add_time_entry_tags`, `remove_time_entry_tags`, `rename_time_entry_tag`
 - **People** — `list_members`, `get_authorized_user`
 
 Deletes and webhook creation are destructive or outward-facing: confirm with the user before calling them.

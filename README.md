@@ -5,7 +5,7 @@ It registers the [`clickup-mcp`](https://github.com/joelpt/clickup-mcp) MCP serv
 
 ## Features
 
-81 tools, one per ClickUp operation, covering:
+90 tools, one per ClickUp operation, covering:
 
 - Tasks, subtasks, search (including closed tasks), moves, dependencies, and links
 - Workspaces, spaces, folders, and lists
@@ -67,7 +67,7 @@ Describe what you want in plain language:
 ## How it works
 
 The plugin's `.mcp.json` registers the `clickup` MCP server, launched on demand with `uvx --from git+https://github.com/joelpt/clickup-mcp@<commit-sha> clickup-mcp`.
-The pin is an immutable full commit SHA: the commit that a CalVer release tag (for example `v2026.06.04.3`) points to.
+The pin is an immutable full commit SHA: the commit that a CalVer release tag (for example `v2026.10.13.1`) points to.
 That SHA matches the plugin's own version line, so the two signal a compatible pair, while the SHA keeps the reference tamper-proof because a tag could be force-moved.
 `uvx` fetches and caches the server and its dependencies on first run.
 
