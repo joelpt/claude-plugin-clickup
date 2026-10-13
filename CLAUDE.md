@@ -1,6 +1,6 @@
 # claude-plugin-clickup — project notes
 
-This plugin registers the `clickup` MCP server (engine lives at `~/code/clickup-mcp`, GitHub `joelpt/clickup-mcp`) via `.mcp.json` and ships the `clickup` skill.
+This plugin registers the `clickup` MCP server (engine lives in GitHub `joelpt/clickup-mcp`) via `.mcp.json` and ships the `clickup` skill.
 Plugin and server are a **matched pair**: the plugin is a thin registration + skill layer over the server, so server changes almost always entail a `.mcp.json` repin here.
 
 ## Versioning & the server pin fit together
@@ -13,6 +13,6 @@ Plugin and server are a **matched pair**: the plugin is a thin registration + sk
 
 ## When the server is updated
 
-1. Release the server first (tag + push) — see `~/code/clickup-mcp/CLAUDE.md`.
+1. Release the server first (tag + push) — see the server repo's `CLAUDE.md`.
 2. Repin `.mcp.json` to the new release's **commit SHA** (the one its tag points to) and bump `.claude-plugin/plugin.json` to match the CalVer, then run the usual marketplace-sync (`claude-plugins.md`).
-3. Update `~/code/cclaw`'s pin too (`CLICKUP_MCP_REF` in `bot/Dockerfile` + the fallback in `bot/entrypoint.sh`) so the bot fleet tracks the same server revision; cclaw needs its own commit + image rebuild.
+3. Bump any private downstream image that pins the server by ref to the same revision.

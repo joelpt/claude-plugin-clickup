@@ -10,6 +10,9 @@ through its `mcp__clickup__*` tools — never shell out to the REST API directly
 
 ## Tools
 
+The server exposes 81 tools, each named `mcp__clickup__<tool>`.
+Core ones, with their main arguments:
+
 ```text
 mcp__clickup__list_workspaces                         list all workspaces (teams)
 mcp__clickup__list_spaces      [workspace_id|workspace_name]
@@ -17,12 +20,32 @@ mcp__clickup__list_folders     space_id
 mcp__clickup__list_lists       [space_id|folder_id]
 mcp__clickup__search_tasks     [query] [filters…]     search/filter tasks
 mcp__clickup__get_task         task_id
-mcp__clickup__create_task      list_id name [opts…]
+mcp__clickup__create_task      list_id name [parent] [opts…]   parent makes a subtask
 mcp__clickup__update_task      task_id [opts…]
+mcp__clickup__move_task        task_id list_id
 mcp__clickup__delete_task      task_id
 mcp__clickup__list_comments    task_id
 mcp__clickup__add_comment      task_id text [notify_all]
 ```
+
+The rest, by domain (use the tool name as listed, with the `mcp__clickup__` prefix):
+
+- **Spaces, folders, lists** — `get_/create_/update_/delete_` for each, plus `create_folderless_list`, `get_list_members`
+- **Tasks** — `get_task_members`, `get_task_time_in_status`, `add_dependency`, `remove_dependency`, `add_task_link`, `remove_task_link`
+- **Checklists** — `create_/update_/delete_checklist` and `create_/update_/delete_checklist_item`
+- **Comments** — `list_list_comments`, `create_list_comment`, `update_comment`, `delete_comment`
+- **Custom fields** — `list_custom_fields`, `set_custom_field_value`, `remove_custom_field_value`
+- **Tags** — `get_space_tags`, `create_/update_/delete_space_tag`, `add_task_tag`, `remove_task_tag`
+- **Goals** — `list_goals`, `get_/create_/update_/delete_goal`, `create_/update_/delete_key_result`
+- **Views** — `list_workspace_views`, `list_space_views`, `list_folder_views`, `list_list_views`, `get_view`, `get_view_tasks`, `create_/update_/delete_view`
+- **Webhooks** — `list_webhooks`, `create_/update_/delete_webhook`
+- **Time tracking** — `get_time_entries`, `get_running_time_entry`, `create_/update_/delete_time_entry`, `start_timer`, `stop_timer`
+- **People** — `list_members`, `get_authorized_user`
+
+Deletes and webhook creation are destructive or outward-facing: confirm with the user before calling them.
+
+`search_tasks` hides closed tasks by default; pass `include_closed=true` for a full audit.
+For a dropdown custom field, pass the option's `id` to `set_custom_field_value`.
 
 All tools return JSON text. Errors surface as MCP tool errors with a message.
 
