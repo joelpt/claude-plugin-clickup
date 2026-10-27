@@ -8,7 +8,7 @@ Plugin and server are a **matched pair**: the plugin is a thin registration + sk
 - `.mcp.json` pins the server by **immutable full commit SHA** — the commit a CalVer release tag (`vYYYY.MM.DD.N`) points to — never a mutable tag or branch.
   A tag can be force-moved, which would let `uvx` silently fetch different code (supply-chain regression); the SHA can't. Document the matching tag in prose, but pin the SHA.
   The commit must already be pushed upstream or `uvx` resolution fails for every consumer.
-- Keep this plugin's `version` (`.claude-plugin/plugin.json`, CalVer per `~/.claude/rules/claude-plugins.md`) **equal to the pinned server version** whenever a server release drives the bump — identical CalVer across both makes compatibility obvious to consumers.
+- Keep this plugin's `version` (`.claude-plugin/plugin.json`, CalVer per `~/.claude/sidecars/claude-plugins.md`) **equal to the pinned server version** whenever a server release drives the bump — identical CalVer across both makes compatibility obvious to consumers.
 - The plugin still bumps independently (per-commit CalVer counter) for plugin-only changes, so the two won't *always* be equal — but on a coordinated server release, sync them.
 
 ## When the server is updated
